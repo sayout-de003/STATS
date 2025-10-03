@@ -1,0 +1,8 @@
+# .gitignore
+stt/
+.env
+__pycache__/
+*.pyc
+/staticfiles
+/media
+node_modules/
