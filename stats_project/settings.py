@@ -43,6 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+  # Third-party
+    "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",  # JWT logout/blacklist
+    "drf_spectacular",
+    "corsheaders",
+    "storages",  
+
     #apps
     "users",
     "projects",
@@ -170,3 +178,6 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+FRONTEND_BASE_URL = "http://127.0.0.1:8000" 
+DEFAULT_FROM_EMAIL = "desayantan1947@gmail.com"

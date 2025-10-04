@@ -1,0 +1,23 @@
+ How the API endpoints map to your pages
+POST /api/v1/auth/register/ → Register user (creates Profile)
+POST /api/v1/auth/login/ → Obtain JWT access + refresh (SimpleJWT)
+POST /api/v1/auth/token/refresh/ → Token refresh
+POST /api/v1/auth/logout/ → Blacklist refresh token (safe logout)
+GET /api/v1/users/me/ → Get current user (via router users/me)
+PATCH /api/v1/users/me/ → Update profile/company/profile fields
+POST /api/v1/auth/password/reset-request/ → Request password reset (sends email)
+POST /api/v1/auth/password/reset-confirm/ → Confirm and set new password
+POST /api/v1/users/kyc/ (router) → Upload KYC doc (multipart)
+GET /api/v1/users/kyc/status/ → Current user's latest KYC status
+GET /api/v1/users/{id}/kyc-status/ → Admin/owner fetch target user's KYC status
+POST /api/v1/users/verify-email/request/ → Send verification email (logged-in user)
+POST /api/v1/users/verify-email/confirm/ → Confirm email with token
+
+ Notes, security & next steps
+Email: send_mail inside Celery tasks uses Django's email backend — configure SMTP or transactional provider (SendGrid/Mailgun). In development you can use console email backend.
+Token expiry / cleanup: you may add a scheduled task to delete expired unused tokens.
+KYC moderation: Admin UI can update KYCDocument.status to approved/rejected and add notes.
+File storage: currently uses MEDIA_ROOT. For MinIO/S3, set DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage" and configure AWS_* env vars.
+Password strength: serializers call Django's password_validation; you may add client-side checks via Pydantic in frontend or server-side custom validators.
+Rate limiting: add rate-limiter for password/email endpoints.
+Webhooks / Idempotency: for critical endpoints (register/kyc submit), consider reading Idempotency-Key header and make handlers idempotent.
